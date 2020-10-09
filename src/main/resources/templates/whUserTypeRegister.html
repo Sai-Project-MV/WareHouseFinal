@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+
+<head>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header text-white text-center bg-primary">
+                <h3>WHUSER TYPE REGISTER PAGE</h3>
+            </div>
+            <div class="card-body">
+                <form th:action="@{/whuser/save}" method="POST" class="form" id="whuserForm" th:object="${orderMethod}">
+                    <div class="row">
+                        <div class="col-2">
+                            USER TYPE
+                        </div>
+                        <div class="col-5">
+                            <input type="radio" value="Vendor" name="whUserType1">Vendor
+                            <input type="radio" value="Customer" name="whUserType1">Customer
+                        </div>
+                        <div class="col-5">
+                            <span id="whUserTypeError"></span>
+                        </div>
+                    </div>
+                    <!-- IFSelect Vendor then sale Customer then Purchase -->
+                    <div class="row">
+                        <div class="col-2">
+                            USER FOR
+                        </div>
+                        <div class="col-5">
+                            <input type="text" id="whuserfor" class="form-control" name="whuserfor" readonly />
+                        </div>
+                        <div class="col-5">
+                            <span id="whuserforError"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-2">
+                            WHUSER CODE
+                        </div>
+                        <div class="col-5">
+                            <input type="text" id="whUserCode" class="form-control" name="whUserCode" />
+                        </div>
+                        <div class="col-5">
+                            <span id="whUserCodeError"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">
+                            WHUSER EMAIL
+                        </div>
+                        <div class="col-5">
+                            <input type="text" class="form-control" id="whUserEmail" name="whUserEmail" />
+                        </div>
+                        <div class="col-5">
+                            <span id="whUserEmailError"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">
+                            WHUSER CONTACT
+                        </div>
+                        <div class="col-5">
+                            <input type="text" class="form-control" id="whUserContact" name="whUserContact" />
+                        </div>
+                        <div class="col-5">
+                            <span id="whUserContactError"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">
+                            WHUSER ID TYPE
+                        </div>
+                        <div class="col-5">
+                            <select class="form-control" id="whUserIdType" name="whUserIdType">
+                                <option value="">--SELECT--</option>
+                                <option value="PAN">PAN</option>
+                                <option value="AADHAR">AADHAR</option>
+                                <option value="VOTER-ID">VOTER-ID</option>
+                                <option value="OTHER">OTHER</option>
+                            </select>
+                        </div>
+                        <div class="col-5">
+                            <span id="whUserIdTypeError"></span>
+                        </div>
+                    </div>
+                    <!-- If Other Option choose  -->
+
+                    <div class="row" id="ifotherrow">
+                        <div class="col-2">
+                            IF OTHER*
+                        </div>
+                        <div class="col-5">
+                            <input type="text" class="form-control" id="ifother" name="ifOther" readonly />
+                        </div>
+                        <div class="col-5">
+                            <span id="ifotherError"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">
+                            WHUSER ID NUMBER
+                        </div>
+                        <div class="col-5">
+                            <input type="text" class="form-control" id="whUserIdNumber" name="whUserIdNumber" />
+                        </div>
+                        <div class="col-5">
+                            <span id="whUserIdNumberError"></span>
+                        </div>
+                    </div>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                    <input type="submit" value="WHUSER REGISTER" class="btn btn-primary">&nbsp;
+                    <input type="reset" value="CLEAR" class="btn btn-warning">
+                </form>
+            </div>
+            <br>
+            <div class="card-footer text-white text-center bg-secondary">
+                <span th:text="${message}"></span>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            //hide error variable
+            $("#whUserTypeError").hide();
+            $("#whUserCodeError").hide();
+            $("#whUserEmailError").hide();
+            $("#whUserContactError").hide();
+            $("#whUserIdTypeError").hide();
+            $("#whUserIdNumberError").hide();
+
+            //define variable and default as false
+            var whUserTypeError = false;
+            var whUserCodeError = false;
+            var whUserEmailError = false;
+            var whUserContactError = false;
+            var whUserIdTypeError = false;
+            var whUserIdNumberError = false;
+
+            //define function
+            function owhUserType_validation() {
+                var whUserType1 = $("[name='whUserType1']:checked").length;
+                if (whUserType1 == 0) {
+                    $("#whUserTypeError").show();
+                    $("#whUserTypeError").html("Select <b>UMUser Type Mode !</b>");
+                    $("#whUserTypeError").css("color", "red");
+                    whUserTypeError = false;
+                } else {
+                    $("#whUserTypeError").hide();
+                    whUserTypeError = true;
+                }
+                return whUserTypeError;
+            }
+            //user for validation
+
+            function whuserfor_validation() {
+                var whUserType1 = $("[name='whUserType1']:checked").val();
+                if (whUserType1 == 'Vendor') {
+                    $("#whuserfor").val("Sale");
+                } else {
+                    $("#whuserfor").val("Purchase");
+                }
+            }
+
+            //WhUser Type Code validation function
+
+            function whUserCode_validation() {
+                var whUserCode = $("#whUserCode").val();
+                var exp = /^[A-Z0-9\-\.\_]{5,15}$/;
+                if (whUserCode == '') {
+                    $("#whUserCodeError").show();
+                    $("#whUserCodeError").html("Enter <b>WHUSER Code !</b>");
+                    $("#whUserCodeError").css("color", "red");
+                    whUserCodeError = false;
+
+                } else if (!exp.test(whUserCode)) {
+                    $("#whUserCodeError").show();
+                    $("#whUserCodeError").html("<b>Should be 5 to 15 Letter And Space Not Allowed !</b>");
+                    $("#whUserCodeError").css("color", "red");
+                    whUserCodeError = false;
+                } else {
+                    $("#whUserCodeError").hide();
+                    whUserCodeError = true;
+                }
+                return whUserCodeError;
+            }
+            // Email Validation function 
+
+            function whUserEmail_validation() {
+                var whUserEmail = $("#whUserEmail").val();
+                var exp = /^([A-Z0-9a-z\-\.\_]+)@([A-Za-z0-9\-\_]+).([A-Za-z0-9]{2,8})(.[A-Za-z0-9]{2,5})?$/;
+                if (whUserEmail == "") {
+                    $("#whUserEmailError").show();
+                    $("#whUserEmailError").html("Enter <b>WHUSER Email Id !</b>");
+                    $("#whUserEmailError").css("color", "red");
+                    whUserEmailError = false;
+
+                }  else if (!exp.test(whUserEmail)) {
+                    $("#whUserEmailError").show();
+                    $("#whUserEmailError").html("<b>Enter Valid Email Address !</b>");
+                    $("#whUserEmailError").css("color", "red");
+                    whUserEmailError = false;
+                }  else {
+                	$.ajax({
+                		url : 'validateEmail',
+                		data : {'email': whUserEmail },
+                		success : function(message){
+                			if(message==''){
+                				 $("#whUserEmailError").hide();
+                                 whUserEmailError = true;
+                			} else{
+                				$("#whUserEmailError").show();
+                                $("#whUserEmailError").html(message);
+                                $("#whUserEmailError").css("color", "red");
+                                whUserEmailError = false;
+                			}
+                		}
+                	});
+                   
+                }
+                return whUserEmailError;
+            }
+            //mobile number validation function
+
+            function whUserContact_validation() {
+                var whUserContact = $("#whUserContact").val();
+                var exp = /^[0-9]{10}$/;
+                if (whUserContact == "") {
+                    $("#whUserContactError").show();
+                    $("#whUserContactError").html("Enter <b>Contact Number !</b>");
+                    $("#whUserContactError").css("color", "red");
+                    whUserContactError = false;
+
+                } else if (!exp.test(whUserContact)) {
+                    $("#whUserContactError").show();
+                    $("#whUserContactError").html("<b>Only 10 Digit Number !</b>");
+                    $("#whUserContactError").css("color", "red");
+                    whUserContactError = false;
+                } else {
+                	$.ajax({
+                		url : 'validateContact',
+                		data :{'contact':whUserContact},
+                		success : function(result){
+                			if(result==''){
+                				 $("#whUserContactError").hide();
+                                 whUserContactError = true;
+                			}else{
+                				 $("#whUserContactError").show();
+                                 $("#whUserContactError").html(result);
+                                 $("#whUserContactError").css("color", "red");
+                                 whUserContactError = false;
+                			}
+                		}
+                	});
+                   
+                }
+                return whUserContactError;
+            }
+            // WhUser Id type validation function
+
+            function whUserIdType_validation() {
+                var whUserIdType = $("#whUserIdType").val();
+                if (whUserIdType == "") {
+                    $("#whUserIdTypeError").show();
+                    $("#whUserIdTypeError").html("Select <b>Any One Type !</b>");
+                    $("#whUserIdTypeError").css("color", "red");
+                    whUserIdTypeError = false;
+                }
+                else {
+                    $("#whUserIdTypeError").hide();
+                    whUserIdTypeError = true;
+                }
+                return whUserIdTypeError;
+            }
+            //if other option choose validation
+
+            function ifother_validation() {
+                var whUserIdType = $("#whUserIdType").val();
+                if (whUserIdType == "OTHER") {
+                    $("#ifotherrow").show();
+                    $("#ifother").removeAttr('readOnly');
+                } else {
+                    $("#ifotherrow").hide();
+                    $("#ifother").attr('readOnly', 'true');
+                    $("#ifother").val("");
+                }
+            }
+            // Id number Validation function
+
+            function whUserIdNumber_validation() {
+                var whUserIdNumber = $("#whUserIdNumber").val();
+                var exp = /^[A-Za-z0-9]{5,12}$/;
+                if (whUserIdNumber == '') {
+                    $("#whUserIdNumberError").show();
+                    $("#whUserIdNumberError").html("Enter <b>Id Number !</b>");
+                    $("#whUserIdNumberError").css("color", "red");
+                    whUserIdNumberError = false;
+                } else if (!exp.test(whUserIdNumber)) {
+                    $("#whUserIdNumberError").show();
+                    $("#whUserIdNumberError").html("<b>Should Be 5 to 20 Charactor Allowed Only !</b>");
+                    $("#whUserIdNumberError").css("color", "red");
+                    whUserIdNumberError = false;
+                } else {
+                    $("#whUserIdNumberError").hide();
+                    whUserIdNumberError = true;
+                }
+                return whUserIdNumberError;
+            }
+
+
+            //calling to define function
+            $("[name='whUserType1']").change(function () {
+                owhUserType_validation();
+                whuserfor_validation();
+            });
+            $("#whUserCode").keyup(function () {
+                $("#whUserCode").val($("#whUserCode").val().toUpperCase());
+                whUserCode_validation();
+            });
+            $("#whUserEmail").keyup(function () {
+                whUserEmail_validation();
+            });
+            $("#whUserContact").keyup(function () {
+                whUserContact_validation();
+            });
+            $("#whUserIdType").change(function () {
+                whUserIdType_validation();
+               /*  ifother_validation(); */
+            });
+            $("#whUserIdType").change(function () {
+                ifother_validation();
+            });
+            $("#whUserIdNumber").keyup(function () {
+            	 $("#whUserIdNumber").val($("#whUserIdNumber").val().toUpperCase());
+                whUserIdNumber_validation();
+            });
+
+            //submit the form
+            $("#whuserForm").submit(function () {
+                owhUserType_validation();
+                whUserCode_validation();
+                whUserEmail_validation();
+                whUserContact_validation();
+                whUserIdType_validation();
+                whUserIdNumber_validation();
+                if (whUserTypeError && whUserCodeError && whUserEmailError
+                    && whUserIdTypeError && whUserContactError && whUserIdNumberError) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+
+<head>
+     <title>Part Data</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="cart-header text-white text-center bg-warning">
+                <h3>Part Data Page</h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-hover">
+                    <tr class="bg-primary text-center text-white">
+                        <th>PART ID</th>
+                        <th>PART CODE</th>
+                        <th>PART DIAMENTION</th>                       
+                        <th>PART COST</th>
+                        <th>PART CURRENCY</th>
+                        <th>UOM </th>  
+                         <th>ORDER</th>                        
+                        <th>OPERATION</th>
+                    </tr>
+                    <tr th:each="part:${partlist}">
+                        <td th:text="${part.id}"></td>
+                        <td th:text="${part.partCode}"></td>
+                        <td th:text="${part.partLen+'L '+part.partWid+'W '+part.partHght+'H'}"></td>                     
+                        <td th:text="${part.partCost}"></td>
+                        <td th:text="${part.partCurrency}"></td>                            
+                        <td th:text="${part.uom.uomModel}"></td>
+                        <td th:text="${part.ordSale.ordCode}"></td>
+                        
+                        <td>
+                            <a th:href="@{/part/delete?id={data}(data=${part.id})}" class="btn btn-danger">DELETE</a>|
+                            <a th:href="@{/part/edit?id={data}(data=${part.id})}" class="btn btn-warning">EDIT</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="card-footer text-white text-center bg-success">
+              <span th:text="${message}"></span>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+
+<head>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header bg-warning text-white text-center">
+                <h4>ORDER METHOD DATA PAGE</h4>
+            </div>
+            <div class="card-body">
+            <a th:href="@{/order/excel}"class="btn btn-warning text-white">Generate Excel Report</a>
+            <br>
+                <table class="table table-hover">
+                    <tr class="bg-primary text-center text-white">
+                        <th>ID</th>
+                        <th>ORDER MODE</th>
+                        <th>ORDER CODE</th>
+                        <th>ORDER TYPE</th>
+                        <th>ORDER ACCEPT</th>
+                        <th>DESCRIPTION</th>
+                        <th>OPERATION</th>
+                    </tr>
+                    <tr th:each="ord:${orderMethodList}">
+                        <td th:text="${ord.ordId}"></td>
+                        <td th:text="${ord.ordMode}"></td>
+                        <td th:text="${ord.ordCode}"></td>
+                        <td th:text="${ord.ordType}"></td>
+                        <td th:text="${ord.ordAccept}"></td>
+                        <td th:text="${ord.ordDescription}"></td>
+                        <td>
+                            <a th:href="@{/order/delete?id={data}(data=${ord.ordId})}" class="btn btn-danger">DELETE</a>|
+                            <a th:href="@{/order/edit?id={data}(data=${ord.ordId})}" class="btn btn-warning">EDIT</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="card-footer bg-secondary text-white text-center">
+                <span th:text="${message}"></span>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+
+<head>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header bg-warning text-white text-center">
+                <h4>UOM DATA PAGE</h4>
+            </div>
+            <div class="card-body">
+            <a th:href="@{/uom/excel}"class="btn btn-warning text-white">Generate Excel Report</a>
+            <br>
+                <table class="table table-hover">
+                    <tr class="bg-primary text-center text-white">
+                        <th>ID</th>
+                        <th>TYPE</th>
+                        <th>MODEL</th>
+                        <th>DESCRIPTION</th>
+                        <th>OPERATION</th>
+                    </tr>
+                    <tr th:each="uom:${uomList}">
+                        <td th:text="${uom.uomId}"></td>
+                        <td th:text="${uom.uomType}"></td>
+                        <td th:text="${uom.uomModel}"></td>
+                        <td th:text="${uom.description}"></td>
+                        <td>
+                            <a th:href="@{/uom/delete?id={data}(data=${uom.uomId})}" class="btn btn-danger">DELETE</a>|
+                            <a th:href="@{/uom/edit?id={data}(data=${uom.uomId})}" class="btn btn-warning">EDIT</a>
+                        </td>
+                    </tr>
+                    <tr>
+                    </tr>
+                </table>
+            </div>
+            <div class="card-footer bg-secondary text-white text-center">
+                <span th:text="${message}"></span>
+            </div>
+        </div>
+    </div>
+    
+</body>
+
+</html>

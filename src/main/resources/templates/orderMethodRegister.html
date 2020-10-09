@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+
+<head>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header text-white text-center bg-primary">
+                <h3>ORDER METHOD REGISTER PAGE</h3>
+            </div>
+            <div class="card-body">
+                <form id="orderForm" th:action="@{/order/save}" method="POST" th:object="${orderMethod}">
+                    <div class="row">
+                        <div class="col-2">
+                            ORDER MODE
+                        </div>
+                        <div class="col-5">
+                            <input type="radio" th:field="*{ordMode}" value="Purchase">Purchase
+                            <input type="radio" th:field="*{ordMode}" value="Sale">Sale
+                        </div>
+                        <div class="col-5">
+                            <span id="ordModeError"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">
+                            ORDER CODE
+                        </div>
+                        <div class="col-5">
+                            <input type="text" th:field="*{ordCode}" id="ordCode" class="form-control" />
+                        </div>
+                        <div class="col-5">
+                            <span id="ordCodeError"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">
+                            ORDER TYPE
+                        </div>
+                        <div class="col-5">
+                            <select th:field="*{ordType}" class="form-control">
+                                <option value="">--SELECT--</option>
+                                <option value="FIFO">FIFO</option>
+                                <option value="FEFO">FEFO</option>
+                                <option value="FCFO">FCFO</option>
+                            </select>
+                        </div>
+                        <div class="col-5">
+                            <span id="ordTypeError"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">
+                            ORDER ACCEPT
+                        </div>
+                        <div class="col-5">
+                            <input type="checkbox" th:field="*{ordAccept}" value="Multi-Model">Multi-Model
+                            <input type="checkbox" th:field="*{ordAccept}" value="Accept-Return">Accept-Return
+                        </div>
+                        <div class="col-5">
+                            <span id="ordAcceptError"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">
+                            DESCRIPTION
+                        </div>
+                        <div class="col-5">
+                            <input type="text" th:field="*{ordDescription}" class="form-control"/>
+                        </div>
+                        <div class="col-5">
+                            <span id="ordDescriptionError"></span>
+                        </div>
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                    <input type="submit" value="Order-Method" class="btn btn-primary">&nbsp;
+                    <input type="reset" value="Clear" class="btn btn-warning">
+                </form>
+            </div>
+            <br>
+            <div class="card-footer text-white text-center bg-info">
+                <span th:text="${message}"></span>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+        $(document).ready(function () {
+            //hide error variable
+            $("#ordModeError").hide();
+            $("#ordCodeError").hide();
+            $("#ordTypeError").hide();
+            $("#ordAcceptError").hide();
+            $("#ordDescriptionError").hide();
+
+            //define variable and default as false
+            var ordModeError = false;
+            var ordCodeError = false;
+            var ordTypeError = false;
+            var ordAcceptError = false;
+            var ordDescriptionError = false;
+
+            //define function
+            function ordeMode_validation() {
+                var ordMode = $("[name='ordMode']:checked").length;
+                if (ordMode == 0) {
+                    $("#ordModeError").show();
+                    $("#ordModeError").html("Select <b>Order Mode !</b>");
+                    $("#ordModeError").css("color", "red");
+                    ordModeError = false;
+                } else {
+                    $("#ordModeError").hide();
+                    ordModeError = true;
+                }
+                return ordModeError;
+            }
+            function ordCode_validation() {
+                var ordCode = $("#ordCode").val();
+                var exp = /^[A-Z0-9\-\.\_]{5,15}$/;
+                if (ordCode == '') {
+                    $("#ordCodeError").show();
+                    $("#ordCodeError").html("Enter <b>Order Code !</b>");
+                    $("#ordCodeError").css("color", "red");
+                    ordCodeError = false;
+
+                } else if (!exp.test(ordCode)) {
+                    $("#ordCodeError").show();
+                    $("#ordCodeError").html("<b>Should be 5 to 15 Letter And Space Not Allowed !</b>");
+                    $("#ordCodeError").css("color", "red");
+                    ordCodeError = false;
+                } else {
+                    $("#ordCodeError").hide();
+                    ordCodeError = true;
+                }
+                return ordCodeError;
+            }
+
+            function ordType_validation() {
+                var ordType = $("#ordType").val();
+                if (ordType =="") {
+                    $("#ordTypeError").show();
+                    $("#ordTypeError").html("<b>Select Any One Type !</b>");
+                    $("#ordTypeError").css("color", "red");
+                    ordTypeError = false;
+                }
+                else {
+                    $("#ordTypeError").hide();
+                    ordTypeError = true;
+                }
+                return ordTypeError;
+            }
+
+            function accept_validation() {
+                var accept = $("[name='ordAccept']:checked").length;
+                if (accept == 0) {
+                    $("#ordAcceptError").show();
+                    $("#ordAcceptError").html("Select <b>Order Acceptance !</b>");
+                    $("#ordAcceptError").css("color", "red");
+                    ordAcceptError = false;
+                } else {
+                    $("#ordAcceptError").hide();
+                    ordAcceptError = true;
+                }
+                return ordAcceptError;
+            }
+            function description_validation() {
+            var  desc=$("#ordDescription").val();
+            var exp=/^[A-Za-z0-9\-\.\,\_\ ]{10,20}$/;
+                if(desc==''){
+                    $("#ordDescriptionError").show();
+                    $("#ordDescriptionError").html("Enter <b>Some Description !</b>");
+                    $("#ordDescriptionError").css("color", "red");
+                    ordDescriptionError=false;
+                } else if(!exp.test(desc)){
+                    $("#ordDescriptionError").show();
+                    $("#ordDescriptionError").html("<b>Should Be 10 to 20 Charactor Allowed Only !</b>");
+                    $("#ordDescriptionError").css("color", "red");
+                    ordDescriptionError=false;
+                } else{
+                    $("#ordDescriptionError").hide();
+                    ordDescriptionError=true;
+                }
+              return ordDescriptionError;
+            }
+
+
+            //calling to define function
+            $("[name='ordMode']").change(function () {
+                ordeMode_validation();
+            });
+            $("#ordCode").keyup(function () {
+                $("#ordCode").val($("#ordCode").val().toUpperCase());
+                ordCode_validation();
+            });
+            $("#ordType").change(function () {
+                ordType_validation();
+            });
+            $("[name='ordAccept']").change(function () {
+                accept_validation();
+            });
+            $("#ordDescription").keyup(function(){
+
+             description_validation();
+            });
+
+            //submit the form
+            $("#orderForm").submit(function () {
+                ordeMode_validation();
+                ordCode_validation();
+                ordType_validation();
+                accept_validation();
+                description_validation();
+                if (ordModeError && ordCodeError && ordTypeError && ordAcceptError && ordDescriptionError) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+        });
+    </script>
+
+</html>

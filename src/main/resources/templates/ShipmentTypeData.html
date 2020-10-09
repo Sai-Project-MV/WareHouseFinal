@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+
+<head>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header bg-primary text-white text-center">
+                <h3>Shipment Type Display Page</h3>
+            </div>
+            <div class="car-body">
+                <table class="table table-hover">
+                    <tr class="bg-secondary text-center text-white">
+                        <th>ID</th>
+                        <th>SHIPMENT_MODE</th>
+                        <th>SHIPMENT_CODE</th>
+                        <th>ENABLE_SHIPMENT</th>
+                        <th>SHIPMENT_GRADE</th>
+                        <th>DISCRIPTION</th>
+                        <th>OPERATION</th>
+                    </tr>
+                    <tr th:each="shp:${shipmentList}">
+                        <td th:text="${shp.shipmentId}"></td>
+                        <td th:text="${shp.shipmentMode}"></td>
+                        <td th:text="${shp.shipmentCode}"></td>
+                        <td th:text="${shp.enableShipment}"></td>
+                        <td th:text="${shp.shipmentGrade}"></td>
+                        <td th:text="${shp.description}"></td>
+                        <td>
+                            <a th:href="@{/shipment/delete?id={data}(data=${shp.shipmentId})}"
+                                class="btn btn-danger">DELETE
+                            </a> |
+                            <a th:href="@{/shipment/edit?id={data}(data=${shp.shipmentId})}"
+                                class="btn btn-warning">EDIT
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="card-footer text-white text-center bg-danger">
+                <span th:text="${message}"></span>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

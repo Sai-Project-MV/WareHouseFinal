@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+
+<head>
+     <title>sale Data</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="cart-header text-white text-center bg-warning">
+                <h3>sale Data Page</h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-hover">
+                    <tr class="bg-primary text-center text-white">
+                        <th>SALE ID</th>
+                        <th>SALE CODE</th>
+                        <th>SALE REF NUMBER</th>                       
+                        <th>SALE QLTY CHECK</th>
+                        <th>SALE STOCK SORC</th>
+                        <th>SALE STATUS </th>  
+                         <th>SALE DESCRIPTION</th>  
+                         <th>SHIPMENT TYPECODE</th>                       
+                         <th>WHUSERTYPE</th> 
+                        <th>OPERATION</th>
+                    </tr>
+                    <tr th:each="sale:${saleOrderList}">
+                        <td th:text="${sale.saleId}"></td>
+                        <td th:text="${sale.saleOrderCode}"></td>
+                        <td th:text="${sale.saleRefNumber}"></td>                     
+                        <td th:text="${sale.saleQualityCheck}"></td>
+                        <td th:text="${sale.saleStockSource}"></td>                            
+                        <td th:text="${sale.status}"></td>
+                        <td th:text="${sale.saleDesc}"></td>
+                        <td th:text="${sale.shipmentType.shipmentCode}"></td>
+                        <td th:text="${sale.customer.whUserType1}"></td>
+                        <td>
+                            <a th:href="@{/sale/delete?id={data}(data=${sale.saleId})}" class="btn btn-danger">DELETE</a>|
+                            <a th:href="@{/sale/edit?id={data}(data=${sale.saleId})}" class="btn btn-warning">EDIT</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="card-footer text-white text-center bg-success">
+              <span th:text="${message}"></span>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+
+<head>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header bg-primary text-white text-center">
+                <h4>UOM REGISTER PAGE</h4>
+            </div>
+            <div class="card-body">
+                <form th:action="@{/uom/save}" method="POST" id="uomform" th:object="${uom}">
+                    <div class="row">
+                        <div class="col-2">
+                            <label>UOM TYPE</label>
+                        </div>
+                        <div class="col-5">
+                            <select th:field="*{uomType}" id="uomType" class="form-control">
+                                <option value="">-SELECT-</option>
+                                <option value="PACKING">PACKING</option>
+                                <option value="NO PACKING">NO PACKING</option>
+                                <option value="NA">NA</option>
+                            </select>
+                        </div>
+                        <div class="col-5">
+                            <span id="uomTypeError"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">
+                            <label>MODEL</label>
+                        </div>
+                        <div class="col-5">
+                            <input type="text" th:field="*{uomModel}" id="uomModel" class="form-control" />
+                        </div>
+                        <div class="col-5">
+                            <span id="uomModelError"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">
+                            <label>DESCRIPTION</label>
+                        </div>
+                        <div class="col-5">
+                            <input type="text" th:field="*{description}" id="description" class="form-control" />
+                        </div>
+                        <div class="col-5">
+                            <span id="descriptionError"></span>
+                        </div>
+                    </div>
+                    <input type="submit" value="ADD UOM" class="btn btn-success" />
+                    <input type="reset" value="Clear" class="btn btn-warning">
+                </form>
+            </div>
+            <div class="card-footer text-center bg-secondary text-white">
+                <span th:text="${message}"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            //hide error variable
+            $("#uomTypeError").hide();
+            $("#uomModelError").hide();
+            $("#descriptionError").hide();
+            //false error variable
+            var uomTypeError = false;
+            var uomModelError = false;
+            var descriptionError = false;
+            //define function
+            function uomType_validation() {
+                var type = $("#uomType").val();
+                if (type == '') {
+                    $("#uomTypeError").show();
+                    $("#uomTypeError").html("<b>Select Any One UOM Type</b>");
+                    $("#uomTypeError").css("color", "red");
+                    uomTypeError = false;
+                } else {
+                    $("#uomTypeError").hide();
+                    uomTypeError = true;
+                }
+                return uomTypeError;
+            }
+            function uomModel_validation() {
+                var model = $("#uomModel").val();
+              
+                if (model == '') {
+                    $("#uomModelError").show();
+                    $("#uomModelError").html("<b>Enter Model Data !</b>");
+                    $("#uomModelError").css("color", "red");
+                    uomModelError = false;
+                } 
+                else {
+                	$.ajax({
+                        url : 'validate',
+                        data : {'model': model},
+                        success : function (testResponse) {
+                            if (testResponse == '') {
+                                $("#uomModelError").hide();
+                                uomModelError = true;
+                            } else {
+                                $("#uomModelError").show();
+                                $("#uomModelError").html(testResponse);
+                                $("#uomModelError").css("color", "red");
+                                uomModelError = false;
+                            }
+                        }
+                    });
+
+                }
+                return uomModelError;
+            }
+            function description_validation() {
+                var description = $("#description").val();
+                if (description == '') {
+                    $("#descriptionError").show();
+                    $("#descriptionError").html("<b>Enter Some Description !</b>");
+                    $("#descriptionError").css("color", "red");
+                    descriptionError = false;
+                } else {
+                    $("#descriptionError").hide();
+                    descriptionError = true;
+                }
+                return descriptionError;
+            }
+            // call to define function
+            $("#uomType").change(function () {
+                uomType_validation();
+            });
+            $("#uomModel").keyup(function () {
+                uomModel_validation();
+            });
+            $("#description").keyup(function () {
+                description_validation();
+            });
+            //form submit validation
+
+            $("#uomform").submit(function () {
+                //calling function
+                uomType_validation();
+                uomModel_validation();
+                description_validation();
+
+                if (uomTypeError && uomModelError && descriptionError) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+
+
+        });
+    </script>
+</body>
+
+</html>
